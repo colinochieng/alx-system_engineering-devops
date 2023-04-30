@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#Bash script that displays the content of the file /etc/passwd
+IFS=:
+while read -a array
+do
+	echo "${array[0]}:${array[2]}:${array[5]}"
+done < /etc/passwd
