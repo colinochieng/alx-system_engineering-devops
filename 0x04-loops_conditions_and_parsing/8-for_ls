@@ -7,5 +7,10 @@
 
 for i in *
 do
-	echo "$i"
+	if [[ $i == *-* ]]
+	then
+		echo "${i#*-}"
+	else
+		echo "$i"
+	fi
 done
