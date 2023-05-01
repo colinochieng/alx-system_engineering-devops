@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#ndefinitely writes I am alive! to the file /tmp/my_process
+#In between every I am alive! message, the program should pause for 2 seconds
+
+touch /tmp/my_process
+
+until false
+do
+	echo "I am alive!" >> /tmp/my_process
+	sleep 2s
+done
