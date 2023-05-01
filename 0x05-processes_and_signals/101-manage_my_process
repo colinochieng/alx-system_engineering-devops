@@ -2,32 +2,30 @@
 #manages manage_my_process
 
 prog="manage_my_process"
-path_file="/root/alx-system_engineering-devops/0x05-processes_and_signals/manage_my_process"
-pid_file="/var/run/my_process.pid"
 
 #start function
 start()
 {
-	"$path_file" &
-	echo "$!" > "$pid_file"
-	echo "$prog started"
+       ./manage_my_process &
+       echo "$!" > /var/run/my_process.pid
+       echo "$prog started"
 }
 
 #stop function
 stop ()
 {
-	kill -9 "$(cat "$pid_file")"
-	rm  -f "$pid_file"
+	kill "$(cat /var/run/my_process.pid)"
+	rm  -f /var/run/my_process.pid
 	echo "$prog stopped"
 }
 
 #restart function
 restart ()
 {
-	kill -9 "$(cat "$pid_file")"
-        rm  -f "$pid_file"
-	"$path_file" &
-	echo "$!" > "$pid_file"
+	kill "$(cat /var/run/my_process.pid)"
+        rm  -f /var/run/my_process.pid
+	./manage_my_process &
+	echo "$!" > /var/run/my_process.pid
 	echo "$prog restarted"
 }
 case "$1" in
