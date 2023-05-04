@@ -1,8 +1,8 @@
 <html>
 <head>
-<title>Networking basics #0</title>
 </head>
 <body>
+<h1>Networking basics #0</h1>
 <h1>Resources</h1>
 <p>Read or Watch:</p>
 <ul>
