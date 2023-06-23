@@ -1,11 +1,11 @@
 #  Configuration management
 ## Resources
 ### Read or watch:
-- `[Intro to Configuration Managemen]`(https://intranet.alxswe.com/rltoken/GL30hu-aRcKzPOvK8JO-Bg)
-- `[Puppet resource type: file (check “Resource types” for all manifest types in the left menu)]`(https://intranet.alxswe.com/rltoken/WON0M4DNRabf88KAG_pDUA)
-- `[Puppet’s Declarative Language: Modeling Instead of Scripting]`(https://intranet.alxswe.com/rltoken/0V2fBdafkfKPMxA1umea3Q)
-- `[Puppet lint]`(https://intranet.alxswe.com/rltoken/CRUMeEMdcX-UtbWsUM9xLQ)
-- `[Puppet emacs mode]`(https://intranet.alxswe.com/rltoken/MzHXCntAkPzOqMnI6_rpWQ)
+- [Intro to Configuration Managemen](https://intranet.alxswe.com/rltoken/GL30hu-aRcKzPOvK8JO-Bg)
+- [Puppet resource type: file (check “Resource types” for all manifest types in the left menu)](https://intranet.alxswe.com/rltoken/WON0M4DNRabf88KAG_pDUA)
+- [Puppet’s Declarative Language: Modeling Instead of Scripting](https://intranet.alxswe.com/rltoken/0V2fBdafkfKPMxA1umea3Q)
+- [Puppet lint](https://intranet.alxswe.com/rltoken/CRUMeEMdcX-UtbWsUM9xLQ)
+- [Puppet emacs mode](https://intranet.alxswe.com/rltoken/MzHXCntAkPzOqMnI6_rpWQ)
 
 ## Requirements
 ### General
@@ -28,7 +28,7 @@ $ apt-get install -y puppet
 ```
 You do not need to attempt to upgrade versions. This project is simply a set of tasks to familiarize you with the basic level syntax which is virtually identical in newer versions of Puppet.
 
-[`Puppet 5 Docs`] (https://intranet.alxswe.com/rltoken/fsIr2xFkJHTkaXwqZFFcbA)
+[Puppet 5 Docs](https://intranet.alxswe.com/rltoken/fsIr2xFkJHTkaXwqZFFcbA)
 
 # Install `puppet-lint`
 
