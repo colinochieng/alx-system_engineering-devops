@@ -1,9 +1,11 @@
 # Client configuration file (w/ Puppet)
 
-file { '~/.ssh/config':
-  ensure  => file,
-  content => "Host *\nPasswordAuthentication no\nIdentityFile ~/.ssh/school\n",
-  owner   => 'root',
-  group   => 'root',
-  mode    => '0600',
+file_line{'Refuse to authenticate using a password':
+  path => '/etc/ssh/ssh_config',
+  line => 'PasswordAuthentication no'
+}
+
+file_line{'Declare configuration file':
+  path => '/etc/ssh/ssh_config',
+  line => 'IdentityFile ~/.ssh/school'
 }
