@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Web debug
+
+/etc/init.d/apache2 start
