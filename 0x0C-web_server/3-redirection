@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Replace a line with multiple lines with sed
+# Configure your Nginx server so that /redirect_me is redirecting to another page.
+# The redirection must be a “301 Moved Permanently”
+sudo apt-get update -y
+sudo apt-get install -y nginx
+echo "Hello world!" | sudo tee /var/www/html/index.nginx-debian.html >/dev/null
+sudo sed -i 's|location / {|location / {\n\t\treturn 301 /https://www.youtube.com/watch?v=zJ6WbK9zFpI;\n|' /etc/nginx/sites-available/default
+sudo service nginx restart
