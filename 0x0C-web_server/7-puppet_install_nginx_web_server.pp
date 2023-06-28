@@ -6,7 +6,7 @@ package {'nginx':
 
 exec {'installation':
   command  => 'sudo apt-get update -y; sudo apt-get install -y nginx',
-  provider => shell.
+  provider => shell,
 }
 
 exec {'firewall':
