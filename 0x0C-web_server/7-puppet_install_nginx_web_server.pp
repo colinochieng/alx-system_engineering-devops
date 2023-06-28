@@ -29,7 +29,7 @@ exec {'configuration':
   provider => shell,
 }
 
-exec {
+exec {"restart":s
   command => 'sudo service nginx restart',
   provider => shell,
 }
