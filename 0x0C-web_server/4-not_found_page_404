@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Configure your Nginx server to have a custom 404 page that contains the string Ceci n'est pas une page
+# The page must return an HTTP 404 error code
+
+#!/usr/bin/env bash
+# Replace a line with multiple lines with sed
+# Configure your Nginx server so that /redirect_me is redirecting to another page.
+# The redirection must be a “301 Moved Permanently”
+sudo apt-get update -y
+sudo apt-get install -y nginx
+sudo ufw allow 'nginx http'
+echo "Hello world!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
+echo "Ceci n'est pas une page" | sudo tee /var/www/custom_404.html > /dev/null
+
+sudo sed -i '0,/location \/ {/ s|location / {|error_page 404 /custom_404.html;\n\n\t\tlocation / {\n\t\treturn 301 /https://www.youtube.com/watch?v=zJ6WbK9zFpI;\n|' /etc/nginx/sites-available/default
+
+sudo service nginx restart
