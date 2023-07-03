@@ -4,8 +4,37 @@
 # When querying Nginx at its root / with a GET request (requesting a page)
 # using curl, it must return a page that contains the string Hello World!
 
-apt-get update
-apt-get install -y nginx
-ufw allow "nginx http"
-echo "Hello world!" > /var/www/html/index.nginx-debian.html
-service nginx restart
+if ! command -v nginx &>/dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y nginx
+fi
+
+if ! sudo ufw status | grep -q "80"; then
+        sudo ufw allow "nginx http"
+fi
+sudo chmod 755 /var/www/html
+sudo chmod -R 755 /var/www
+echo "Hello world!" | sudo tee /var/www/html/index.nginx-debian.html >/dev/null
+
+default_config="
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
+
+        location / {
+                try_files \$uri \$uri/ =404;
+        }
+}
+"
+echo "$default_config" | sudo tee /etc/nginx/sites-available/default >/dev/null
+
+if [ "$(pgrep -c nginx)" -le 0 ]; then
+        sudo service nginx start
+else
+        sudo service nginx restart
+fi
