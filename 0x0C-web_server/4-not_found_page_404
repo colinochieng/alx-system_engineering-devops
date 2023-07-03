@@ -6,12 +6,48 @@
 # Replace a line with multiple lines with sed
 # Configure your Nginx server so that /redirect_me is redirecting to another page.
 # The redirection must be a “301 Moved Permanently”
-sudo apt-get update -y
-sudo apt-get install -y nginx
-sudo ufw allow 'nginx http'
-echo "Hello world!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
+
+if ! command -v nginx &>/dev/null; then
+        sudo apt-get update
+        sudo apt-get install -y nginx
+fi
+
+if ! sudo ufw status | grep -q "80"; then
+        sudo ufw allow "nginx http"
+fi
+sudo chmod 755 /var/www/html
+sudo chmod -R 755 /var/www
+echo "Hello world!" | sudo tee /var/www/html/index.nginx-debian.html >/dev/null
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html > /dev/null
 
-sudo sed -i '0,/location \/ {/ s|location / {|error_page 404 /custom_404.html;\n\n\tlocation  ~ ^/redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=zJ6WbK9zFpI;\n|' /etc/nginx/sites-available/default
+default_config="
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-sudo service nginx restart
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
+
+        location / {
+                try_files \$uri \$uri/ =404;
+                rewrite ^/redirect_me(.*)\$ https://www.youtube.com/watch?v=70JD5YTemJc permanent;
+        }
+
+        error_page 404 /custom_404.html;
+        location = /custom_404.html {
+                internal;
+        }
+#       location ~ /redirect_me {
+#               return 301 https://www.example.com/;
+#       }
+}
+"
+echo "$default_config" | sudo tee /etc/nginx/sites-available/default >/dev/null
+
+if [ "$(pgrep -c nginx)" -le 0 ]; then
+        sudo service nginx start
+else
+        sudo service nginx restart
+fi
