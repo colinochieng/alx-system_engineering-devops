@@ -1,41 +1,48 @@
-#
+# configuring your server with Puppet
+
+exec { 'updates needed':
+  command => 'apt-get update',
+  path    => '/usr/bin:/usr/sbin:/bin'
+}
 
 package { 'nginx':
-  ensure => installed,
+  ensure          => installed,
+  install_options => ['-y'],
+  provider        => 'apt-get',
 }
 
 service { 'nginx':
-  ensure => running,
-  enable => true,
+  ensure  => running,
+  enable  => true,
   require => Package['nginx'],
 }
 
 exec { 'allow_nginx_http':
   command => 'ufw allow "nginx http"',
-  unless => 'ufw status | grep -q "80"',
+  unless  => 'ufw status | grep -q "80"',
   require => Package['nginx'],
 }
 
 file { '/var/www/html':
   ensure => directory,
-  mode => '0755',
+  mode   => '0755',
 }
 
 file { '/var/www':
-  ensure => directory,
-  mode => '0755',
+  ensure  => directory,
+  mode    => '0755',
   recurse => true,
 }
 
 file { '/var/www/html/index.nginx-debian.html':
-  content => 'Hello world!',
-  mode => '0644',
+  content => 'Hello world!\n',
+  mode    => '0644',
   require => File['/var/www/html'],
 }
 
 file { '/var/www/html/custom_404.html':
   content => "Ceci n'est pas une page",
-  mode => '0644',
+  mode    => '0644',
   require => File['/var/www/html'],
 }
 
@@ -62,6 +69,5 @@ server {
 }
 END
   require => Package['nginx'],
-  notify => Service['nginx'],
+  notify  => Service['nginx'],
 }
-
