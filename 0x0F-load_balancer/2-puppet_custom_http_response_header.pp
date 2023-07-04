@@ -2,8 +2,32 @@
 # The name of the custom HTTP header must be X-Served-By
 # The value of the custom HTTP header must be the hostname of the server Nginx is running on
 
-$default_config = "
-server {
+exec { 'update and upgrade the system':
+  command  => 'sudo apt-get update && sudo apt-get install -y nginx',
+  path     => ['/bin/bash', '/usr/bin/bash'],
+  provider => 'shell',
+}
+
+package { 'nginx':
+  ensure => installed,
+  before => File['/etc/nginx/sites-available/default'],
+}
+
+file { '/var/www/html/index.nginx-debian.html':
+  ensure  => present,
+  content => "Hello world!\n",
+}
+
+file { '/var/www/html/custom_404.html':
+  ensure  => present,
+  content => "Ceci n'est pas une page",
+  require => Package['nginx'],
+}
+
+file { '/etc/nginx/sites-available/default':
+  ensure  => present,
+  content => "
+  server {
         listen 80 default_server;
         listen [::]:80 default_server;
 
@@ -29,41 +53,6 @@ server {
 #       }
 }
 "
-
-exec { 'update and upgrade the system':
-  command  => 'sudo apt-get update && sudo apt-get install -y nginx',
-  path     => ['/bin/bash', '/usr/bin/bash'],
-  provider => 'shell',
-}
-
-package { 'nginx':
-  ensure => installed,
-  before => File['/etc/nginx/sites-available/default'],
-}
-
-$files = ['/var/www/html', '/var/www']
-
-$files.each |$file| {
-  file {${file}:
-    ensure => present,
-    mode   => '0755'
-  }
-}
-
-file { '/var/www/html/index.nginx-debian.html':
-  ensure  => present,
-  content => "Hello world!\n",
-}
-
-file { '/var/www/html/custom_404.html':
-  ensure  => present,
-  content => "Ceci n'est pas une page",
-  require => Package['nginx'],
-}
-
-file { '/etc/nginx/sites-available/default':
-  ensure  => present,
-  content => ${default_config},
   notify  => Service['nginx'],
   require => Package['nginx'],
 }
