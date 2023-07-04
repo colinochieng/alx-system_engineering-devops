@@ -32,7 +32,7 @@ file { '/etc/nginx/sites-available/default':
         listen [::]:80 default_server;
 
         # Add custom header
-        add_header X-Served-By $hostname;
+        add_header X-Served-By \$hostname;
 
         root /var/www/html;
         index index.html index.htm index.nginx-debian.html;
