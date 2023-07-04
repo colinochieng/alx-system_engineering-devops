@@ -44,7 +44,7 @@ package { 'nginx':
 $files = ['/var/www/html', '/var/www']
 
 $files.each |$file| {
-  file {$file:
+  file {${file}:
     ensure => present,
     mode   => '0755'
   }
@@ -58,12 +58,14 @@ file { '/var/www/html/index.nginx-debian.html':
 file { '/var/www/html/custom_404.html':
   ensure  => present,
   content => "Ceci n'est pas une page",
+  require => Package['nginx'],
 }
 
 file { '/etc/nginx/sites-available/default':
   ensure  => present,
-  content => $default_config,
+  content => ${default_config},
   notify  => Service['nginx'],
+  require => Package['nginx'],
 }
 
 service { 'nginx':
@@ -71,5 +73,5 @@ service { 'nginx':
   enable    => true,
   hasstatus => true,
   restart   => '/usr/sbin/service nginx reload',
-  require => File['/etc/nginx/sites-available/default'],
+  require   => Package['nginx'],
 }
