@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 # Install and configure HAProxy on lb-01 server
-
 # Update system packages
+
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
 # Install HAProxy
+apt-get install --no-install-recommends software-properties-common
+add-apt-repository ppa:vbernat/haproxy-2.8
 sudo apt-get install -y haproxy
 
 # Configure HAProxy
 sudo mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.backup
 sudo touch /etc/haproxy/haproxy.cfg
 
-echo 'global
-    daemon
-    maxconn 256
-
+echo '
 defaults
     mode http
     timeout connect 5000ms
@@ -28,9 +27,14 @@ frontend http-in
 
 backend webservers
     balance roundrobin
-    server web-01 web-01.example.com:80 check
-    server web-02 web-02.example.com:80 check
+    server 197657-web-01 100.25.20.99:80 check
+    server 197657-web-02 100.26.167.158:80 check
 ' | sudo tee /etc/haproxy/haproxy.cfg >/dev/null
+
+if ! sudo haproxy -c -f /etc/haproxy/haproxy.cfg | grep -w "valid"; then
+        echo "Configuration file is not valid"
+        exit 1
+fi
 
 # Enable HAProxy init script
 sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
