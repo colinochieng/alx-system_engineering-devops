@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Task 1: Configure domain zone so that the subdomain www points to your load-balancer IP (lb-01)
+# Add the subdomain lb-01 to your domain, point it to your lb-01 IP
+# Add the subdomain web-01 to your domain, point it to your web-01 IP
+# Add the subdomain web-02 to your domain, point it to your web-02 IP
+# Bash script must accept 2 arguments
+# When only the parameter domain is provided, display information for its 
+# subdomains www, lb-01, web-01 and web-02 - in this specific order
+# Output: The subdomain [SUB_DOMAIN] is a [RECORD_TYPE] record and points to [DESTINATION]
+
+audit_subdomain() {
+        domain="$1"
+        subdomain="$2"
+
+        if [[ -z "$subdomain" ]]; then
+                subdomains=("www" "lb-01" "web-01" "web-02")
+        else
+                subdomains=("$subdomain")
+        fi
+
+        for sub in "${subdomains[@]}"; do
+                record_type=$(dig +short "$sub.$domain" | awk '{print $4}')
+                destination=$(dig +short "$sub.$domain" | awk '{print $1}')
+
+                echo "The subdomain $sub is a $record_type record and points to $destination"
+        done
+}
+
+audit_subdomain "$1" "$2"
