@@ -1,15 +1,4 @@
 #!/usr/bin/env bash
 # Bash script to make Nginx be run, and listenon port 80 of all the server’s active IPv4 IPs
-
-# Check if the ufw command exists
-if ! command -v ufw >/dev/null 2>&1; then
-        sudo apt update
-        sudo apt install -y ufw
-fi
-
-if ! sudo ufw status | grep -q "80"; then
-        sudo ufw allow "nginx http"
-else
-        sudo kill "$(sudo lsof -t -i :80)"
-        sudo ufw allow "nginx http"
-fi
+sudo awk '{sub("8080", "80")}1' /etc/nginx/sites-enabled/default
+sudo service nginx restart
