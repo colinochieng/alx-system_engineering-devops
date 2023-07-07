@@ -2,3 +2,4 @@
 # Bash script to make Nginx be run, and listenon port 80 of all the server’s active IPv4 IPs: make your fix short and sweet
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 sudo service nginx restart
+echo '' > /run/nginx.pid
