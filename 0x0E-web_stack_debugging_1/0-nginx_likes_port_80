@@ -3,5 +3,4 @@
 sudo sed -i 's/listen 8080/listen 80/g' /etc/nginx/sites-enabled/default
 sudo sed -i 's/listen \[::\]:8080/listen \[::\]:80/g' /etc/nginx/sites-enabled/default
 sudo service nginx restart
-sudo kill "$(pgrep 'nginx' | head -1)"
 
