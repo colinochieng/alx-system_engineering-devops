@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # Bash script to make Nginx be run, and listenon port 80 of all the server’s active IPv4 IPs
-sudo awk '{sub("8080", "80")}1' /etc/nginx/sites-enabled/default > tmp_file
-sudo mv tmp_file /etc/nginx/sites-enabled/default
+sudo sed -i 's/80/8080/' /etc/nginx/sites-enabled/default
 sudo service nginx restart
+
