@@ -49,6 +49,7 @@ frontend https-in
         http-request set-header X-Forwarded-Proto https
         redirect scheme https if !{ ssl_fc }
         default_backend webservers
+        redirect scheme https code 301 if !{ ssl_fc }
 
         # Let the letsencrypt backend handle requests to the
         # acme-challenge url
