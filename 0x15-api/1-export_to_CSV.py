@@ -31,13 +31,10 @@ if __name__ == '__main__':
         new.update({'TASK_TITLE': dic.get('title')})
 
         return new
-    
-    
+
     alter_list = list(map(delete_keys, todo_list))
-    
-    field_names = ['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE']
+    fields = ['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE']
 
     with open(f'{id}.csv', 'w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=field_names, quoting=csv.QUOTE_ALL)
+        writer = csv.DictWriter(file, fieldnames=fields, quoting=csv.QUOTE_ALL)
         writer.writerows(alter_list)
-    
