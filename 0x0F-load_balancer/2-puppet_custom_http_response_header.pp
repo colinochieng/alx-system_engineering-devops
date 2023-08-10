@@ -24,7 +24,7 @@ service { 'nginx':
 
 file { '/var/www/html/index.nginx-debian.html':
   ensure  => present,
-  content => "Hello world!\n",
+  content => "Hello World!\n",
 }
 
 file { '/var/www/html/custom_404.html':
