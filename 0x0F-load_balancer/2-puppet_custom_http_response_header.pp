@@ -3,14 +3,15 @@
 # The value of the custom HTTP header must be the hostname of the server Nginx is running on
 
 exec { 'update and upgrade the system':
-  command  => 'sudo apt-get update && sudo apt-get install -y nginx',
-  path     => ['/bin/bash', '/usr/bin/bash'],
+  command  => 'apt update && apt install -y nginx',
+  path     => '/bin/bash:/usr/bin/bash:/bin',
   provider => 'shell',
 }
 
 package { 'nginx':
-  ensure => installed,
-  before => File['/etc/nginx/sites-available/default'],
+  ensure          => installed,
+  install_options => ['-y'],
+  provider        => 'apt',
 }
 
 file { '/var/www/html/index.nginx-debian.html':
@@ -26,13 +27,15 @@ file { '/var/www/html/custom_404.html':
 
 file { '/etc/nginx/sites-available/default':
   ensure  => present,
+  require => Package['nginx'],
+  notify  => Service['nginx'],
   content => "
   server {
         listen 80 default_server;
         listen [::]:80 default_server;
 
         # Add custom header
-        add_header X-Served-By \$hostname;
+        add_header X-Served-By $hostname;
 
         root /var/www/html;
         index index.html index.htm index.nginx-debian.html;
@@ -40,8 +43,8 @@ file { '/etc/nginx/sites-available/default':
         server_name _;
 
         location / {
-                try_files \$uri \$uri/ =404;
-                rewrite ^/redirect_me(.*) https://www.youtube.com/watch?v=70JD5YTemJc permanent;
+                try_files $uri $uri/ =404;
+                rewrite ^/redirect_me(.*)$ https://www.youtube.com/watch?v=70JD5YTemJc permanent;
         }
 
         error_page 404 /custom_404.html;
@@ -52,9 +55,7 @@ file { '/etc/nginx/sites-available/default':
 #               return 301 https://www.example.com/;
 #       }
 }
-"
-  notify  => Service['nginx'],
-  require => Package['nginx'],
+",
 }
 
 service { 'nginx':
