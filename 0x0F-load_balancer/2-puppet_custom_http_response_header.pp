@@ -14,6 +14,14 @@ package { 'nginx':
   provider        => 'apt',
 }
 
+service { 'nginx':
+  ensure    => running,
+  enable    => true,
+  hasstatus => true,
+  restart   => '/usr/sbin/service nginx reload',
+  require   => Package['nginx'],
+}
+
 file { '/var/www/html/index.nginx-debian.html':
   ensure  => present,
   content => "Hello world!\n",
@@ -27,9 +35,7 @@ file { '/var/www/html/custom_404.html':
 
 file { '/etc/nginx/sites-available/default':
   ensure  => present,
-  require => Package['nginx'],
-  notify  => Service['nginx'],
-  content => "
+  content => @(END),
   server {
         listen 80 default_server;
         listen [::]:80 default_server;
@@ -55,13 +61,8 @@ file { '/etc/nginx/sites-available/default':
 #               return 301 https://www.example.com/;
 #       }
 }
-",
-}
-
-service { 'nginx':
-  ensure    => running,
-  enable    => true,
-  hasstatus => true,
-  restart   => '/usr/sbin/service nginx reload',
-  require   => Package['nginx'],
+"
+END
+  require => Package['nginx'],
+  notify  => Service['nginx'],
 }
