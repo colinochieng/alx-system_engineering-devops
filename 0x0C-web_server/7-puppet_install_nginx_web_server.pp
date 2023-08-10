@@ -29,7 +29,7 @@ file { '/var/www':
 }
 
 file { '/var/www/html/index.nginx-debian.html':
-  content => "Hello world!\n",
+  content => 'Hello world!',
   mode    => '0644',
   require => File['/var/www/html'],
 }
