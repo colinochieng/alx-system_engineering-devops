@@ -1,25 +1,19 @@
 # configuring your server with Puppet
 
 exec { 'updates needed':
-  command => 'apt-get update',
+  command => 'apt update',
   path    => '/usr/bin:/usr/sbin:/bin'
 }
 
 package { 'nginx':
   ensure          => installed,
   install_options => ['-y'],
-  provider        => 'apt-get',
+  provider        => 'apt',
 }
 
 service { 'nginx':
   ensure  => running,
   enable  => true,
-  require => Package['nginx'],
-}
-
-exec { 'allow_nginx_http':
-  command => 'ufw allow "nginx http"',
-  unless  => 'ufw status | grep -q "80"',
   require => Package['nginx'],
 }
 
@@ -58,8 +52,8 @@ server {
         server_name _;
 
         location / {
-                try_files \$uri \$uri/ =404;
-                rewrite ^/redirect_me(.*)\$ https://www.youtube.com/watch?v=70JD5YTemJc permanent;
+                try_files $uri $uri/ =404;
+                rewrite ^/redirect_me(.*)$ https://www.youtube.com/watch?v=70JD5YTemJc permanent;
         }
 
         error_page 404 /custom_404.html;
@@ -71,3 +65,4 @@ END
   require => Package['nginx'],
   notify  => Service['nginx'],
 }
+
