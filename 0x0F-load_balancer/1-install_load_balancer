@@ -28,8 +28,8 @@ frontend http-in
 
 backend webservers
     balance roundrobin
-    server 197657-web-01 100.25.20.99:80 check
-    server 197657-web-02 100.26.167.158:80 check
+    server 197657-web-01 54.144.147.16:80 check
+    server 197657-web-02 35.153.79.189:80 check
 ' | sudo tee /etc/haproxy/haproxy.cfg >/dev/null
 
 if ! sudo haproxy -c -f /etc/haproxy/haproxy.cfg | grep -w "valid"; then

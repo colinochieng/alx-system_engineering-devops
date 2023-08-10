@@ -61,6 +61,7 @@ file { '/etc/nginx/sites-available/default':
 #               return 301 https://www.example.com/;
 #       }
 }
+"
 END
   require => Package['nginx'],
   notify  => Service['nginx'],
